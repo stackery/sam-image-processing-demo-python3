@@ -1,0 +1,55 @@
+AWSTemplateFormatVersion: 2010-09-09
+Transform: AWS::Serverless-2016-10-31
+Resources:
+  objectStore3D456515:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub ${AWS::StackName}-objectstore3d456515
+    Metadata:
+      StackeryName: Uploaded Images
+  functionED8CCE6E:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub ${AWS::StackName}-functionED8CCE6E
+      Description: !Sub
+        - Stackery Stack ${StackeryStackTagName} Environment ${StackeryEnvironmentTagName} Function ${ResourceName}
+        - ResourceName: imageProcessor
+      CodeUri: src/functionED8CCE6E
+      Handler: handler.handler
+      Runtime: python3.6
+      MemorySize: 3008
+      Timeout: 30
+      Tracing: Active
+      Policies:
+        - AWSXrayWriteOnlyAccess
+        - S3CrudPolicy:
+            BucketName: !Ref objectStore298737B6
+        - S3CrudPolicy:
+            BucketName: !Sub ${AWS::StackName}-objectstore3d456515
+      Events:
+        objectStore3D456515:
+          Type: S3
+          Properties:
+            Bucket: !Ref objectStore3D456515
+            Events:
+              - s3:ObjectCreated:*
+              - s3:ObjectRemoved:*
+      Environment:
+        Variables:
+          BUCKET_NAME: !Ref objectStore298737B6
+          BUCKET_ARN: !GetAtt objectStore298737B6.Arn
+    Metadata:
+      StackeryName: imageProcessor
+  objectStore298737B6:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub ${AWS::StackName}-objectstore298737b6
+    Metadata:
+      StackeryName: Processed Images
+Parameters:
+  StackeryStackTagName:
+    Type: String
+    Description: Stack Name (injected by Stackery at deployment time)
+  StackeryEnvironmentTagName:
+    Type: String
+    Description: Environment Name (injected by Stackery at deployment time)
