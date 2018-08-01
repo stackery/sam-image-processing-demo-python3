@@ -3,8 +3,6 @@ import botocore
 import re
 from PIL import Image
 import os
-# import numpy
-# import cv2
 
 def handler(message, context):
     print(message)
@@ -38,9 +36,7 @@ def handler(message, context):
     thumbnailImage = "200x200-%s" % imageName
     thumbnailPath = "/tmp/%s" % thumbnailImage
     size = 200, 200
-    # imageBuffer = cv2.LoadImage(image)
-    # imageBuffer = cv2.Resize(imageBuffer, (200, 200))
-    # cv.SaveImage(thumbnailImage, imageBuffer)
+
     im = Image.open(imagePath)
     im.thumbnail(size)
     im.save(thumbnailPath)
