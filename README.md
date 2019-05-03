@@ -19,6 +19,8 @@ Here is an overview of the files:
 │   └── imageProcessor                 <-- Source code dir for imageProcessor function
 │       ├── requirements.txt           <-- Python pip dependencies
 │       └── handler.py                 <-- Lambda imageProcessor function code
+│       ├── .stackery-config.yaml      <-- Default CLI parameters for this directory
+├── .stackery-config.yaml              <-- Default CLI parameters for root directory
 └── template.yaml                      <-- SAM infrastructure-as-code template
 ```
 
